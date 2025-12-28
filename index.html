@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classic Music Player</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Georgia', serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .music-player {
+            background: white;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 380px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            border: 1px solid #e0e0e0;
+        }
+        
+        /* Header */
+        .player-header {
+            background: #2c3e50;
+            padding: 20px;
+            text-align: center;
+            color: white;
+            border-bottom: 1px solid #34495e;
+        }
+        
+        .player-header h1 {
+            font-size: 22px;
+            font-weight: normal;
+            letter-spacing: 1px;
+        }
+        
+        /* Album Section */
+        .album-section {
+            padding: 30px 25px 20px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .album-art {
+            width: 180px;
+            height: 180px;
+            border-radius: 8px;
+            margin: 0 auto 20px;
+            background: #ecf0f1;
+            border: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        
+        .album-art i {
+            font-size: 48px;
+            opacity: 0.7;
+        }
+        
+        .song-title {
+            font-size: 20px;
+            color: #2c3e50;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        .artist {
+            font-size: 15px;
+            color: #7f8c8d;
+        }
+        
+        /* Progress Bar */
+        .progress-section {
+            padding: 20px 25px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .progress-bar {
+            height: 4px;
+            background: #ecf0f1;
+            border-radius: 2px;
+            margin-bottom: 8px;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            width: 45%;
+            background: #3498db;
+            border-radius: 2px;
+        }
+        
+        .time-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: #7f8c8d;
+        }
+        
+        
+        .controls {
+            padding: 20px 25px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .control-btn {
+            background: none;
+            border: 1px solid #ddd;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 16px;
+            color: #2c3e50;
+            transition: all 0.2s;
+        }
+        
+        .play-btn {
+            width: 56px;
+            height: 56px;
+            background: #2c3e50;
+            color: white;
+            font-size: 20px;
+            border: none;
+        }
+        
+        .control-btn:hover {
+            border-color: #3498db;
+            color: #3498db;
+        }
+        
+        .play-btn:hover {
+            background: #3498db;
+        }
+        
+        
+        .volume-section {
+            padding: 15px 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .volume-icon {
+            color: #7f8c8d;
+            font-size: 18px;
+            width: 24px;
+        }
+        
+        .volume-slider {
+            flex: 1;
+            height: 4px;
+            background: #ecf0f1;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        
+        .volume-level {
+            height: 100%;
+            width: 70%;
+            background: #95a5a6;
+            border-radius: 2px;
+        }
+        
+        
+        .playlist {
+            padding: 20px 25px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .playlist h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 16px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .playlist-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #f5f5f5;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .playlist-item:last-child {
+            border-bottom: none;
+        }
+        
+        .playlist-item:hover {
+            background: #f9f9f9;
+        }
+        
+        .playlist-item.active {
+            color: #3498db;
+        }
+        
+        .playlist-num {
+            width: 24px;
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+        
+        .playlist-info {
+            flex: 1;
+        }
+        
+        .playlist-title {
+            font-size: 15px;
+        }
+        
+        .playlist-artist {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-top: 2px;
+        }
+        
+        .playlist-duration {
+            font-size: 13px;
+            color: #95a5a6;
+        }
+        
+        
+        .playlist::-webkit-scrollbar {
+            width: 4px;
+        }
+        
+        .playlist::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        .playlist::-webkit-scrollbar-thumb {
+            background: #bdc3c7;
+        }
+        
+        
+        .player-footer {
+            padding: 15px 25px;
+            background: #f9f9f9;
+            text-align: center;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+            font-size: 12px;
+        }
+        
+        
+        .control-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .playlist-item:active {
+            background: #ecf0f1;
+        }
+        
+        
+        @media (max-width: 400px) {
+            .music-player {
+                max-width: 100%;
+            }
+            
+            .album-art {
+                width: 160px;
+                height: 160px;
+            }
+            
+            .controls {
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="music-player">
+        
+        <div class="player-header">
+            <h1><i class="fas fa-music"></i> Music Player</h1>
+        </div>
+        
+        
+        <div class="album-section">
+            <div class="album-art">
+                <i class="fas fa-compact-disc"></i>
+            </div>
+            <div class="album-info">
+                <div class="song-title">Die With A Smile</div>
+                <div class="artist">Lad Gaga, Bruno Mars</div>
+            </div>
+        </div>
+        
+        
+        <div class="progress-section">
+            <div class="progress-bar">
+                <div class="progress"></div>
+            </div>
+            <div class="time-info">
+                <span class="current-time">2:30</span>
+                <span class="total-time">5:45</span>
+            </div>
+        </div>
+        
+        
+        <div class="controls">
+            <button class="control-btn" title="Previous">
+                <i class="fas fa-step-backward"></i>
+            </button>
+            
+            <button class="control-btn play-btn" title="Play/Pause">
+                <i class="fas fa-play"></i>
+            </button>
+            
+            <button class="control-btn" title="Next">
+                <i class="fas fa-step-forward"></i>
+            </button>
+        </div>
+        
+        
+        <div class="volume-section">
+            <div class="volume-icon">
+                <i class="fas fa-volume-up"></i>
+            </div>
+            <div class="volume-slider">
+                <div class="volume-level"></div>
+            </div>
+        </div>
+        
+        
+        <div class="playlist">
+            <h3><i class="fas fa-list"></i> Playlist</h3>
+            
+            <div class="playlist-item active">
+                <div class="playlist-num">1</div>
+                <div class="playlist-info">
+                    <div class="playlist-title">Senorita</div>
+                    <div class="playlist-artist">Shawn Mendes</div>
+                </div>
+                <div class="playlist-duration">5:45</div>
+            </div>
+            
+            <div class="playlist-item">
+                <div class="playlist-num">2</div>
+                <div class="playlist-info">
+                    <div class="playlist-title">Timeless</div>
+                    <div class="playlist-artist">The weeknd</div>
+                </div>
+                <div class="playlist-duration">3:20</div>
+            </div>
+            
+            <div class="playlist-item">
+                <div class="playlist-num">3</div>
+                <div class="playlist-info">
+                    <div class="playlist-title">Ordinary</div>
+                    <div class="playlist-artist">Alex Warren</div>
+                </div>
+                <div class="playlist-duration">4:55</div>
+            </div>
+            
+            <div class="playlist-item">
+                <div class="playlist-num">4</div>
+                <div class="playlist-info">
+                    <div class="playlist-title">Snowman</div>
+                    <div class="playlist-artist">Sia</div>
+                </div>
+                <div class="playlist-duration">6:15</div>
+            </div>
+            
+            <div class="playlist-item">
+                <div class="playlist-num">5</div>
+                <div class="playlist-info">
+                    <div class="playlist-title">Dandelions</div>
+                    <div class="playlist-artist">Ruth B</div>
+                </div>
+                <div class="playlist-duration">4:30</div>
+            </div>
+        </div>
+        
+        
+        <div class="player-footer">
+            Pop Music Collection • Now Playing
+        </div>
+    </div>
+    
+    
+    <style>
+        
+        .progress-bar:hover .progress {
+            background: #2980b9;
+        }
+        
+        /
+        .volume-slider:hover .volume-level {
+            background: #7f8c8d;
+        }
+        
+        
+        .play-btn:active {
+            transform: scale(0.92);
+        }
+        
+        
+        .play-btn.playing .fa-play::before {
+            content: "\f04c"; 
+        }
+        
+        
+        .playlist-item:active {
+            color: #2980b9;
+        }
+    </style>
+</body>
+</html>
